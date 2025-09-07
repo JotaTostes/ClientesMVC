@@ -15,7 +15,7 @@ namespace Clientes.Infra.Data.Repositories
         public TelefoneRepository(AppDbContext ctx) => _ctx = ctx;
 
 
-        public async Task<List<Telefone>> GetByClienteAsync(int codigoCliente) =>
+        public async Task<List<Telefone>> GetByClienteAsync(Guid codigoCliente) =>
         await _ctx.Telefones.Where(t => t.CodigoCliente == codigoCliente).AsNoTracking().ToListAsync();
 
 

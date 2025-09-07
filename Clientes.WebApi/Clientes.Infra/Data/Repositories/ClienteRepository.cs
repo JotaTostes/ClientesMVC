@@ -15,7 +15,7 @@ namespace Clientes.Infra.Data.Repositories
         public ClienteRepository(AppDbContext ctx) => _ctx = ctx;
 
 
-        public async Task<Cliente?> GetByIdAsync(int id) =>
+        public async Task<Cliente?> GetByIdAsync(Guid id) =>
         await _ctx.Clientes.Include(c => c.Telefones).FirstOrDefaultAsync(c => c.CodigoCliente == id);
 
 
@@ -38,11 +38,9 @@ namespace Clientes.Infra.Data.Repositories
         }
 
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Cliente entity)
         {
-            var e = await _ctx.Clientes.FindAsync(id);
-            if (e is null) return;
-            _ctx.Clientes.Remove(e);
+            _ctx.Clientes.Remove(entity);
             await _ctx.SaveChangesAsync();
         }
     }

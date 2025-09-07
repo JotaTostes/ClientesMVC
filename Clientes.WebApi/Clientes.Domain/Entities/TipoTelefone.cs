@@ -16,3 +16,4 @@ namespace Clientes.Domain.Entities
 
         public ICollection<Telefone> Telefones { get; set; } = new List<Telefone>();
     }
+}

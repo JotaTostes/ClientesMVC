@@ -10,7 +10,7 @@ namespace Clientes.Domain.Entities
     {
         public Guid CodigoCliente { get; set; }
         public string NumeroTelefone { get; set; } = string.Empty;
-        public int CodigoTipoTelefone { get; set; }
+        public Guid CodigoTipoTelefone { get; set; }
         public string? Operadora { get; set; }
         public bool Ativo { get; set; } = true;
         public DateTime DataInsercao { get; set; } = DateTime.UtcNow;

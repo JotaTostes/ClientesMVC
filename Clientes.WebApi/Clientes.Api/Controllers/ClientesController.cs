@@ -1,4 +1,5 @@
-﻿using Clientes.Domain.Entities;
+﻿using Clientes.Application.Interfaces;
+using Clientes.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,42 +9,34 @@ namespace Clientes.Api.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IClienteService _clienteService;
 
-        public ClientesController(AppDbContext context)
+        public ClientesController(IClienteService clienteService)
         {
-            _context = context;
+            _clienteService = clienteService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetAll()
         {
-            var clientes = await _context.Clientes
-                .Include(c => c.Telefones)
-                .ToListAsync();
+            var clientes = await _clienteService.GetAllClientesAsync();
             return Ok(clientes);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetById(Guid id)
         {
-            var cliente = await _context.Clientes
-                .Include(c => c.Telefones)
-                .FirstOrDefaultAsync(c => c.CodigoCliente == id);
+            var cliente = await _clienteService.GetClienteByIdAsync(id);
 
-            if (cliente == null)
-                return NotFound();
-
-            return Ok(cliente);
+            return cliente is null
+                ? NotFound()
+                : Ok(cliente);
         }
 
         [HttpPost]
         public async Task<ActionResult<Cliente>> Create(Cliente cliente)
         {
-            cliente.UsuarioInsercao = "sistema"; // pode vir do contexto de login
-
-            _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync();
+            await _clienteService.AddClienteAsync(cliente);
 
             return CreatedAtAction(nameof(GetById), new { id = cliente.CodigoCliente }, cliente);
         }
@@ -51,39 +44,17 @@ namespace Clientes.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, Cliente cliente)
         {
-            if (id != cliente.CodigoCliente)
-                return BadRequest();
+            var res = await _clienteService.UpdateClienteAsync(id, cliente);
 
-            var existente = await _context.Clientes.FindAsync(id);
-            if (existente == null)
-                return NotFound();
-
-            // Atualiza campos
-            existente.RazaoSocial = cliente.RazaoSocial;
-            existente.NomeFantasia = cliente.NomeFantasia;
-            existente.TipoPessoa = cliente.TipoPessoa;
-            existente.Documento = cliente.Documento;
-            existente.Endereco = cliente.Endereco;
-            existente.Complemento = cliente.Complemento;
-            existente.Bairro = cliente.Bairro;
-            existente.Cidade = cliente.Cidade;
-            existente.CEP = cliente.CEP;
-            existente.UF = cliente.UF;
-
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return res ? Ok() : NotFound();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
-                return NotFound();
+            var res = await _clienteService.DeleteClienteAsync(id);
 
-            _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return res ? Ok() : NotFound();
         }
     }
 }
