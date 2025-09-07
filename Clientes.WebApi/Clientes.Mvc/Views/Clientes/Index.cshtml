@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Clientes.Mvc.Models.ClienteViewModel>
+
+<h2>Lista de Clientes</h2>
+
+<a asp-controller="Clientes" asp-action="Create" class="btn btn-primary">Novo Cliente</a>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Razão Social</th>
+            <th>Nome Fantasia</th>
+            <th>Documento</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in Model)
+        {
+            <tr>
+                <td>@cliente.RazaoSocial</td>
+                <td>@cliente.NomeFantasia</td>
+                <td>@cliente.Documento</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@cliente.CodigoCliente" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@cliente.CodigoCliente" class="btn btn-sm btn-danger">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

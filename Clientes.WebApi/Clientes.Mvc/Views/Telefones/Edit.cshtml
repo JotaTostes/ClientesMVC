@@ -1,0 +1,32 @@
+﻿@model Clientes.Mvc.Models.TelefoneViewModel
+
+<h2>Editar Telefone</h2>
+
+<form id="form-edit-telefone">
+    <input type="hidden" asp-for="CodigoCliente" />
+    <input type="hidden" asp-for="NumeroTelefone" />
+
+    <div class="mb-3">
+        <label asp-for="CodigoTipoTelefone"></label>
+        <select asp-for="CodigoTipoTelefone" id="CodigoTipoTelefone" class="form-control"
+                asp-items="@(new SelectList(ViewBag.TiposTelefone, "CodigoTipoTelefone", "DescricaoTipoTelefone"))"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Operadora"></label>
+        <input asp-for="Operadora" id="Operadora" class="form-control" />
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="Ativo" id="Ativo" class="form-check-input" />
+        <label asp-for="Ativo" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    <a asp-controller="Telefones" asp-action="Index" asp-route-clienteId="@Model.CodigoCliente"
+       class="btn btn-secondary">Voltar</a>
+</form>
+
+@section Scripts {
+    <script src="~/js/telefones.js"></script>
+}

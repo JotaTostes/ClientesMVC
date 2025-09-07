@@ -1,0 +1,17 @@
+﻿@model Clientes.Mvc.Models.ClienteViewModel
+
+<h2>Excluir Cliente</h2>
+
+<h4>Tem certeza que deseja excluir este cliente?</h4>
+
+<div>
+    <p><strong>Razão Social:</strong> @Model.RazaoSocial</p>
+    <p><strong>Nome Fantasia:</strong> @Model.NomeFantasia</p>
+    <p><strong>Documento:</strong> @Model.Documento</p>
+</div>
+
+<form id="form-delete-cliente">
+    <input type="hidden" asp-for="CodigoCliente" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

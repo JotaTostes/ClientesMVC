@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Clientes.Mvc.Models.TelefoneViewModel>
+
+<h2>Telefones</h2>
+
+<a asp-controller="Telefones" asp-action="Create" asp-route-clienteId="@ViewBag.ClienteId"
+   class="btn btn-primary">Novo Telefone</a>
+
+<table id="tabela-telefones" class="table mt-3">
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Tipo</th>
+            <th>Operadora</th>
+            <th>Ativo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tel in Model)
+        {
+            <tr data-numero="@tel.NumeroTelefone">
+                <td>@tel.NumeroTelefone</td>
+                <td>@tel.DescricaoTipoTelefone</td>
+                <td>@tel.Operadora</td>
+                <td>@(tel.Ativo ? "Sim" : "Não")</td>
+                <td>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-warning btn-editar"
+                       data-cliente="@tel.CodigoCliente" data-numero="@tel.NumeroTelefone">Editar</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-danger btn-excluir"
+                       data-cliente="@tel.CodigoCliente" data-numero="@tel.NumeroTelefone">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/telefones.js"></script>
+}
