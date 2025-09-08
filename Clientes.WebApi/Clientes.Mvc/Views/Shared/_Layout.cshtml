@@ -1,0 +1,45 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<Clientes.Mvc.Configuration.ApiSettings> apiSettings
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Gestão de Clientes</title>
+    <!-- Link para o CSS do Bootstrap via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Gestão de Clientes</a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - Desafio CRUD de Clientes
+        </div>
+    </footer>
+
+    <!-- Link para o jQuery e Bootstrap JS via CDN (essencial para o modal e AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/clientes.js"></script>
+
+    <!-- Expor a URL da API para uso no clientes.js -->
+    <script>
+        window.apiBaseUrl = "@apiSettings.Value.BaseUrl";
+    </script>
+
+    <!-- Renderiza a secção de scripts definida nas outras views -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

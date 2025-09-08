@@ -10,9 +10,9 @@ namespace Clientes.Domain.Interfaces
     public interface ITelefoneRepository
     {
         Task<List<Telefone>> GetByClienteAsync(Guid codigoCliente);
-        Task<Telefone?> GetAsync(int codigoCliente, string numeroTelefone);
+        Task<Telefone?> GetAsync(Guid codigoCliente, string numeroTelefone);
         Task<Telefone> AddAsync(Telefone entity);
         Task UpdateAsync(Telefone entity);
-        Task DeleteAsync(int codigoCliente, string numeroTelefone);
+        Task DeleteAsync(Guid codigoCliente, string numeroTelefone);
     }
 }

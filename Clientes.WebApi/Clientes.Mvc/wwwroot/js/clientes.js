@@ -9,6 +9,8 @@
             tipoPessoa: $("#TipoPessoa").val(),
             documento: $("#Documento").val(),
             endereco: $("#Endereco").val(),
+            complemento: $("#Complemento").val(),
+            bairro: $("#Bairro").val(),
             cidade: $("#Cidade").val(),
             uf: $("#UF").val(),
             cep: $("#CEP").val(),
@@ -16,7 +18,7 @@
         };
 
         $.ajax({
-            url: "/api/clientes",
+            url: window.apiBaseUrl + "/clientes",
             method: "POST",
             data: JSON.stringify(cliente),
             contentType: "application/json",
@@ -24,8 +26,9 @@
                 alert("Cliente cadastrado com sucesso!");
                 window.location.href = "/Clientes/Index";
             },
-            error: function () {
-                alert("Erro ao cadastrar cliente.");
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert("Erro: " + xhr.status + " - " + xhr.responseText);
             }
         });
     });
@@ -49,7 +52,7 @@
         };
 
         $.ajax({
-            url: "/api/clientes/" + clienteId,
+            url: window.apiBaseUrl + "/clientes" + clienteId,
             method: "PUT",
             data: JSON.stringify(cliente),
             contentType: "application/json",
@@ -69,7 +72,7 @@
         let clienteId = $("#CodigoCliente").val();
 
         $.ajax({
-            url: "/api/clientes/" + clienteId,
+            url: window.apiBaseUrl + "/clientes" + clienteId,
             method: "DELETE",
             success: function () {
                 alert("Cliente excluído!");

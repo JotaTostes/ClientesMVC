@@ -21,6 +21,7 @@ namespace Clientes.Api.Configuration
 
             //Services
             services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<ITelefoneService, TelefoneService>();
 
             //Repositories
             services.AddScoped<IClienteRepository, ClienteRepository>();

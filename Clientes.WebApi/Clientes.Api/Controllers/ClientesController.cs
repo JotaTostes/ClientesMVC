@@ -1,4 +1,5 @@
-﻿using Clientes.Application.Interfaces;
+﻿using Clientes.Application.DTOs.Cliente;
+using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace Clientes.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Cliente>), 200)]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetAll()
         {
             var clientes = await _clienteService.GetAllClientesAsync();
@@ -24,6 +26,7 @@ namespace Clientes.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Cliente), 200)]
         public async Task<ActionResult<Cliente>> GetById(Guid id)
         {
             var cliente = await _clienteService.GetClienteByIdAsync(id);
@@ -34,27 +37,34 @@ namespace Clientes.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cliente>> Create(Cliente cliente)
+        [ProducesResponseType(typeof(Cliente), 201)]
+        [ProducesResponseType(typeof(List<string>), 400)]
+        public async Task<ActionResult<Cliente>> Create([FromBody] CreateClienteDto clienteDto)
         {
-            await _clienteService.AddClienteAsync(cliente);
+            var response = await _clienteService.AddClienteAsync(clienteDto);
 
-            return CreatedAtAction(nameof(GetById), new { id = cliente.CodigoCliente }, cliente);
+            return CreatedAtAction(nameof(GetById), new { id = response.CodigoCliente }, response);
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(List<string>), 400)]
+        [ProducesResponseType(typeof(List<string>), 404)]
         public async Task<IActionResult> Update(Guid id, Cliente cliente)
         {
-            var res = await _clienteService.UpdateClienteAsync(id, cliente);
+            var (success, erros) = await _clienteService.UpdateClienteAsync(id, cliente);
 
-            return res ? Ok() : NotFound();
+            return success ? NoContent() : BadRequest(new { Mensagem = "Erro ao atualizar informações do cliente.", Erros = erros });
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(List<string>), 404)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var res = await _clienteService.DeleteClienteAsync(id);
+            var (success, erros) = await _clienteService.DeleteClienteAsync(id);
 
-            return res ? Ok() : NotFound();
+            return success ? NoContent() : NotFound(new { Mensagem = "Erro ao deletar cliente.", Erros = erros });
         }
     }
 }

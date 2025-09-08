@@ -19,7 +19,7 @@ namespace Clientes.Infra.Data.Repositories
         await _ctx.Telefones.Where(t => t.CodigoCliente == codigoCliente).AsNoTracking().ToListAsync();
 
 
-        public async Task<Telefone?> GetAsync(int codigoCliente, string numeroTelefone) =>
+        public async Task<Telefone?> GetAsync(Guid codigoCliente, string numeroTelefone) =>
         await _ctx.Telefones.FindAsync(codigoCliente, numeroTelefone);
 
 
@@ -38,7 +38,7 @@ namespace Clientes.Infra.Data.Repositories
         }
 
 
-        public async Task DeleteAsync(int codigoCliente, string numeroTelefone)
+        public async Task DeleteAsync(Guid codigoCliente, string numeroTelefone)
         {
             var e = await _ctx.Telefones.FindAsync(codigoCliente, numeroTelefone);
             if (e is null) return;

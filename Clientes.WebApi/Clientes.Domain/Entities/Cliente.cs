@@ -8,7 +8,7 @@ namespace Clientes.Domain.Entities
 {
     public class Cliente
     {
-        public Guid CodigoCliente { get; set; } = Guid.NewGuid();
+        public Guid CodigoCliente { get; set; }
         public string RazaoSocial { get; set; } = string.Empty;
         public string NomeFantasia { get; set; } = string.Empty;
         public string TipoPessoa { get; set; } = "J"; // J=Jurídica, F=Física

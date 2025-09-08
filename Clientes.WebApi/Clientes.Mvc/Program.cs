@@ -1,11 +1,16 @@
+using Clientes.Mvc.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<ApiSettings>(
+    builder.Configuration.GetSection("ApiSettings"));
+
 builder.Services.AddHttpClient("Api", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:5001/api/");
+    client.BaseAddress = new Uri("https://localhost:7174/api/");
 });
 
 var app = builder.Build();
