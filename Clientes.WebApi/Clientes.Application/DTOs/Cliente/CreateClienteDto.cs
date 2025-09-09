@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Clientes.Application.DTOs.Telefone;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Clientes.Application.DTOs.Cliente
 {
@@ -48,6 +44,8 @@ namespace Clientes.Application.DTOs.Cliente
         [Required(ErrorMessage = "Usuário de inserção é obrigatório")]
         [StringLength(50, ErrorMessage = "Usuário de inserção deve ter no máximo 50 caracteres")]
         public string UsuarioInsercao { get; set; } = "ADMIN";
+
+        public List<CreateTelefoneDto> Telefones { get; set; }
 
     }
 }

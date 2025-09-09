@@ -14,8 +14,21 @@
             cidade: $("#Cidade").val(),
             uf: $("#UF").val(),
             cep: $("#CEP").val(),
-            usuarioInsercao: "admin"
+            usuarioInsercao: "admin",
+            telefones: []
         };
+
+        $("#tabela-telefones tbody tr").each(function () {
+            let numero = $(this).find("input[name*='.Numero']").val();
+            let codigoTipoTelefone = $(this).find("select.tipo-telefone").val();
+
+            if (numero && codigoTipoTelefone) {
+                cliente.telefones.push({
+                    numeroTelefone: numero,
+                    codigoTipoTelefone: codigoTipoTelefone
+                });
+            }
+        });
 
         $.ajax({
             url: window.apiBaseUrl + "/clientes",
@@ -46,13 +59,28 @@
             tipoPessoa: $("#TipoPessoa").val(),
             documento: $("#Documento").val(),
             endereco: $("#Endereco").val(),
+            complemento: $("#Complemento").val(),
+            bairro: $("#Bairro").val(),
             cidade: $("#Cidade").val(),
             uf: $("#UF").val(),
-            cep: $("#CEP").val()
+            cep: $("#CEP").val(),
+            telefones: []
         };
 
+        $("#tabela-telefones tbody tr").each(function () {
+            let numero = $(this).find("input[name*='.Numero']").val();
+            let codigoTipoTelefone = $(this).find("select.tipo-telefone").val();
+            
+            if (numero && codigoTipoTelefone) {
+                cliente.telefones.push({
+                    numeroTelefone: numero,
+                    codigoTipoTelefone: codigoTipoTelefone
+                });
+            }
+        });
+
         $.ajax({
-            url: window.apiBaseUrl + "/clientes" + clienteId,
+            url: window.apiBaseUrl + "/clientes/" + clienteId,
             method: "PUT",
             data: JSON.stringify(cliente),
             contentType: "application/json",
@@ -60,27 +88,69 @@
                 alert("Cliente atualizado com sucesso!");
                 window.location.href = "/Clientes/Index";
             },
-            error: function () {
-                alert("Erro ao atualizar cliente.");
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                console.log("UrlRequisicao", url)
+                alert("Erro: " + xhr.status + " - " + xhr.responseText);
             }
         });
     });
 
-    // Delete Cliente
-    $("#form-delete-cliente").submit(function (e) {
-        e.preventDefault();
-        let clienteId = $("#CodigoCliente").val();
+    $('.btn-excluir-ajax').on('click', function () {
+        const clienteId = $(this).data('id');
+        const clienteNome = $(this).data('nome');
 
-        $.ajax({
-            url: window.apiBaseUrl + "/clientes" + clienteId,
-            method: "DELETE",
-            success: function () {
-                alert("Cliente excluído!");
-                window.location.href = "/Clientes/Index";
-            },
-            error: function () {
-                alert("Erro ao excluir cliente.");
-            }
-        });
+        if (confirm(`Tem a certeza que deseja excluir o cliente "${clienteNome}"?`)) {
+            $.ajax({
+                url: window.apiBaseUrl + "/clientes/" + clienteId,
+                method: 'DELETE',
+                success: function () {
+                    alert('Cliente excluído com sucesso!');
+                    location.reload();
+                },
+                error: function () {
+                    alert('Erro ao excluir cliente.');
+                }
+            });
+        }
     });
+    function aplicarMascaraDocumento() {
+        var tipo = $("#TipoPessoa").val();
+        var $doc = $("#Documento");
+
+        if ($doc.length === 0) return;
+
+        $doc.unmask();
+
+        if (tipo === "F") {
+            $doc.mask("000.000.000-00", { reverse: true });
+        } else if (tipo === "J") {
+            $doc.mask("00.000.000/0000-00", { reverse: true });
+        }
+    }
+
+    aplicarMascaraDocumento();
+
+    $("#TipoPessoa").change(function () {
+        $("#Documento").val("");
+        aplicarMascaraDocumento();
+    });
+
+    //// Delete Cliente
+    //$("#form-delete-cliente").submit(function (e) {
+    //    e.preventDefault();
+    //    let clienteId = $("#CodigoCliente").val();
+
+    //    $.ajax({
+    //        url: window.apiBaseUrl + "/clientes" + clienteId,
+    //        method: "DELETE",
+    //        success: function () {
+    //            alert("Cliente excluído!");
+    //            window.location.href = "/Clientes/Index";
+    //        },
+    //        error: function () {
+    //            alert("Erro ao excluir cliente.");
+    //        }
+    //    });
+    //});
 });

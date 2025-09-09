@@ -16,7 +16,7 @@ namespace Clientes.Infra.Data.Repositories
 
 
         public async Task<Cliente?> GetByIdAsync(Guid id) =>
-        await _ctx.Clientes.Include(c => c.Telefones).FirstOrDefaultAsync(c => c.CodigoCliente == id);
+        await _ctx.Clientes.Include(c => c.Telefones.Where(t => t.Ativo)).FirstOrDefaultAsync(c => c.CodigoCliente == id);
 
 
         public async Task<List<Cliente>> GetAllAsync() =>

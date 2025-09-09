@@ -28,7 +28,6 @@ namespace Clientes.Mvc.Models
         public DateTime DataInsercao { get; set; }
         public string UsuarioInsercao { get; set; }
 
-        // Telefones relacionados
         public List<TelefoneViewModel> Telefones { get; set; } = new();
     }
 }

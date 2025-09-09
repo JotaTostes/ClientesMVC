@@ -11,7 +11,8 @@ namespace Clientes.Domain.Interfaces
     {
         Task<List<Telefone>> GetByClienteAsync(Guid codigoCliente);
         Task<Telefone?> GetAsync(Guid codigoCliente, string numeroTelefone);
-        Task<Telefone> AddAsync(Telefone entity);
+        Task<Telefone?> GetByNumeroAsync(string numeroTelefone);
+        Task <Telefone> AddAsync(Telefone entity);
         Task UpdateAsync(Telefone entity);
         Task DeleteAsync(Guid codigoCliente, string numeroTelefone);
     }

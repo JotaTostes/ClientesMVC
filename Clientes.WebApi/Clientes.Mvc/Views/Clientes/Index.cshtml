@@ -14,17 +14,33 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var cliente in Model)
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var cliente in Model)
+            {
+                <tr>
+                    <td>@cliente.RazaoSocial</td>
+                    <td>@cliente.NomeFantasia</td>
+                    <td>@cliente.Documento</td>
+                    <td>
+                        <a asp-controller="Clientes" asp-action="Edit" asp-route-id="@cliente.CodigoCliente" class="btn btn-sm btn-warning">Editar</a>
+
+                        <button class="btn btn-sm btn-danger btn-excluir-ajax"
+                                data-id="@cliente.CodigoCliente"
+                                data-nome="@cliente.RazaoSocial">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@cliente.RazaoSocial</td>
-                <td>@cliente.NomeFantasia</td>
-                <td>@cliente.Documento</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@cliente.CodigoCliente" class="btn btn-sm btn-warning">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@cliente.CodigoCliente" class="btn btn-sm btn-danger">Excluir</a>
-                </td>
+                <td colspan="4" class="text-center">Nenhum cliente encontrado.</td>
             </tr>
         }
     </tbody>
 </table>
+
+

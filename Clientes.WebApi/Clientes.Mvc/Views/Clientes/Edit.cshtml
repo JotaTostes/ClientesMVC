@@ -1,53 +1,114 @@
 ﻿@model Clientes.Mvc.Models.ClienteViewModel
 
-<h2>Editar Cliente</h2>
+@{
+	ViewData["Title"] = "Editar Cliente";
+}
 
-<form id="form-edit-cliente">
-    <input type="hidden" asp-for="CodigoCliente" />
+<h2>@ViewData["Title"]</h2>
+<hr />
 
-    <div class="mb-3">
-        <label asp-for="RazaoSocial"></label>
-        <input asp-for="RazaoSocial" class="form-control" />
-    </div>
+<div class="row">
+	<div class="col-md-6">
+		<form id="form-edit-cliente">
+			<input type="hidden" asp-for="CodigoCliente" />
 
-    <div class="mb-3">
-        <label asp-for="NomeFantasia"></label>
-        <input asp-for="NomeFantasia" class="form-control" />
-    </div>
+			<!-- Campos do cliente -->
+			<div class="mb-3">
+				<label asp-for="RazaoSocial" class="form-label"></label>
+				<input asp-for="RazaoSocial" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="NomeFantasia" class="form-label"></label>
+				<input asp-for="NomeFantasia" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="TipoPessoa" class="form-label"></label>
+				<select asp-for="TipoPessoa" class="form-select">
+					<option value="F">Pessoa Física</option>
+					<option value="J">Pessoa Jurídica</option>
+				</select>
+			</div>
+			<div class="mb-3">
+				<label asp-for="Documento" class="form-label"></label>
+				<input asp-for="Documento" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="Endereco" class="form-label"></label>
+				<input asp-for="Endereco" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="Complemento" class="form-label"></label>
+				<input asp-for="Complemento" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="Bairro" class="form-label"></label>
+				<input asp-for="Bairro" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="Cidade" class="form-label"></label>
+				<input asp-for="Cidade" class="form-control" />
+			</div>
+			<div class="row">
+				<div class="col-md-6 mb-3">
+					<label asp-for="UF" class="form-label"></label>
+					<input asp-for="UF" maxlength="2" class="form-control" />
+				</div>
+				<div class="col-md-6 mb-3">
+					<label asp-for="CEP" class="form-label"></label>
+					<input asp-for="CEP" class="form-control" />
+				</div>
+			</div>
 
-    <div class="mb-3">
-        <label asp-for="TipoPessoa"></label>
-        <select asp-for="TipoPessoa" class="form-control">
-            <option value="F" selected="@("F" == Model.TipoPessoa)">Pessoa Física</option>
-            <option value="J" selected="@("J" == Model.TipoPessoa)">Pessoa Jurídica</option>
-        </select>
-    </div>
+			<!-- Telefones -->
+			<h4>Telefones</h4>
+			<table class="table" id="tabela-telefones">
+				<thead>
+					<tr>
+						<th>Número</th>
+						<th>Tipo</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (int i = 0; i < Model.Telefones.Count; i++)
+					{
+						<tr>
+							<td>
+								<input name="Telefones[@i].NumeroTelefone" value="@Model.Telefones[i].NumeroTelefone" class="form-control" />
+							</td>
+							<td>
+								<select name="Telefones[@i].CodigoTipoTelefone" class="form-control tipo-telefone" data-selected="@Model.Telefones[i].CodigoTipoTelefone"></select>
+							</td>
+							<td>
+								<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+			<button type="button" class="btn btn-primary" id="btn-add-telefone">Adicionar Telefone</button>
 
-    <div class="mb-3">
-        <label asp-for="Documento"></label>
-        <input asp-for="Documento" class="form-control" />
-    </div>
+			<br /><br />
+			<button type="submit" class="btn btn-success">Salvar Alterações</button>
+			<a asp-action="Index" class="btn btn-secondary">Voltar</a>
+		</form>
+	</div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Endereco"></label>
-        <input asp-for="Endereco" class="form-control" />
-    </div>
+<table style="display:none">
+	<tbody>
+		<tr id="template-telefone">
+			<td><input name="Telefones[0].NumeroTelefone" class="form-control" /></td>
+			<td>
+				<select name="Telefones[0].CodigoTipoTelefone" class="form-control tipo-telefone"></select>
+			</td>
+			<td>
+				<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-    <div class="mb-3">
-        <label asp-for="Cidade"></label>
-        <input asp-for="Cidade" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="UF"></label>
-        <input asp-for="UF" maxlength="2" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CEP"></label>
-        <input asp-for="CEP" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-</form>
+@section Scripts {
+	<script src="~/js/telefones.js" asp-append-version="true"></script>
+}

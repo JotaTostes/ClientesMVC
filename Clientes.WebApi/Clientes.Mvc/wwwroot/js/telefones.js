@@ -1,103 +1,62 @@
 ﻿$(document).ready(function () {
-    $("#form-create-telefone").submit(function (e) {
-        e.preventDefault();
+    let contador = 0;
 
-        let clienteId = $("#CodigoCliente").val();
+    $("#btn-add-telefone").click(function () {
+        let $clone = $("#template-telefone").clone();
+        $clone.removeAttr("id").show();
 
-        let telefone = {
-            codigoCliente: clienteId,
-            numeroTelefone: $("#NumeroTelefone").val(),
-            codigoTipoTelefone: $("#CodigoTipoTelefone").val(),
-            operadora: $("#Operadora").val(),
-            ativo: $("#Ativo").is(":checked"),
-            usuarioInsercao: "admin"
-        };
+        // Atualiza os índices dos inputs
+        $clone.find("input, select").each(function () {
+            let name = $(this).attr("name");
+            name = name.replace(/\d+/, contador);
+            $(this).attr("name", name);
+        });
 
+        $("#tabela-telefones tbody").append($clone);
+
+        carregarTiposTelefone($clone.find(".tipo-telefone"));
+        contador++;
+    });
+
+    $(document).on("click", ".btn-remove-telefone", function () {
+        $(this).closest("tr").remove();
+        let numero = $(this).closest("tr").find("input[name*='NumeroTelefone']").val();
         $.ajax({
-            url: "/api/clientes/" + clienteId + "/telefones",
-            method: "POST",
-            data: JSON.stringify(telefone),
-            contentType: "application/json",
-            success: function () {
-                alert("Telefone cadastrado com sucesso!");
-                window.location.href = "/Telefones/Index?clienteId=" + clienteId;
+            url: window.apiBaseUrl + "/telefone/" + numero,
+            method: 'DELETE',
+            success: function (data) {
+                alert("Telefone excluido com sucesso");
             },
-            error: function () {
-                alert("Erro ao cadastrar telefone.");
+            error: function (err) {
+                console.error('Erro ao excluir telefone', err);
             }
         });
     });
 
-
-    $("#form-edit-telefone").submit(function (e) {
-        e.preventDefault();
-
-        let clienteId = $("#CodigoCliente").val();
-        let numeroTelefone = $("#NumeroTelefone").val();
-
-        let telefone = {
-            codigoCliente: clienteId,
-            numeroTelefone: numeroTelefone,
-            codigoTipoTelefone: $("#CodigoTipoTelefone").val(),
-            operadora: $("#Operadora").val(),
-            ativo: $("#Ativo").is(":checked")
-        };
-
+    function carregarTiposTelefone(selectElement, valorSelecionado = null) {
         $.ajax({
-            url: "/api/clientes/" + clienteId + "/telefones/" + numeroTelefone,
-            method: "PUT",
-            data: JSON.stringify(telefone),
-            contentType: "application/json",
-            success: function () {
-                alert("Telefone atualizado!");
-                window.location.href = "/Telefones/Index?clienteId=" + clienteId;
+            url: window.apiBaseUrl + "/telefone/tipos-telefone",
+            method: 'GET',
+            success: function (data) {
+                $(selectElement).empty();
+                data.forEach(function (tipo) {
+                    $(selectElement).append(
+                        $('<option>', {
+                            value: tipo.codigoTipoTelefone,
+                            text: tipo.descricao,
+                            selected: tipo.codigoTipoTelefone === valorSelecionado
+                        })
+                    );
+                });
             },
-            error: function () {
-                alert("Erro ao atualizar telefone.");
+            error: function (err) {
+                console.error('Erro ao carregar tipos de telefone', err);
             }
         });
-    });
+    }
 
-    $("#form-delete-telefone").submit(function (e) {
-        e.preventDefault();
-
-        let clienteId = $("#CodigoCliente").val();
-        let numeroTelefone = $("#NumeroTelefone").val();
-
-        $.ajax({
-            url: "/api/clientes/" + clienteId + "/telefones/" + numeroTelefone,
-            method: "DELETE",
-            success: function () {
-                alert("Telefone excluído!");
-                window.location.href = "/Telefones/Index?clienteId=" + clienteId;
-            },
-            error: function () {
-                alert("Erro ao excluir telefone.");
-            }
-        });
-    });
-
-    $(".btn-excluir").click(function () {
-        if (!confirm("Deseja realmente excluir este telefone?")) return;
-
-        let clienteId = $(this).data("cliente");
-        let numeroTelefone = $(this).data("numero");
-
-        $.ajax({
-            url: "/api/clientes/" + clienteId + "/telefones/" + numeroTelefone,
-            method: "DELETE",
-            success: function () {
-                $("tr[data-numero='" + numeroTelefone + "']").remove();
-            },
-            error: function () {
-                alert("Erro ao excluir telefone.");
-            }
-        });
-    });
-
-    $(".btn-editar").click(function () {
-        let clienteId = $(this).data("cliente");
-        let numeroTelefone = $(this).data("numero");
-        window.location.href = "/Telefones/Edit?clienteId=" + clienteId + "&numeroTelefone=" + numeroTelefone;
+    $(".tipo-telefone").each(function () {
+        let valorSelecionado = $(this).data("selected");
+        carregarTiposTelefone(this, valorSelecionado);
     });
 });

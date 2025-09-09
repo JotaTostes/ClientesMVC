@@ -26,8 +26,8 @@ namespace Clientes.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Cliente), 200)]
-        public async Task<ActionResult<Cliente>> GetById(Guid id)
+        [ProducesResponseType(typeof(ResponseClientes), 200)]
+        public async Task<ActionResult<ResponseClientes>> GetById(Guid id)
         {
             var cliente = await _clienteService.GetClienteByIdAsync(id);
 
@@ -37,9 +37,9 @@ namespace Clientes.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Cliente), 201)]
+        [ProducesResponseType(typeof(ResponseClientes), 201)]
         [ProducesResponseType(typeof(List<string>), 400)]
-        public async Task<ActionResult<Cliente>> Create([FromBody] CreateClienteDto clienteDto)
+        public async Task<ActionResult<ResponseClientes>> Create([FromBody] CreateClienteDto clienteDto)
         {
             var response = await _clienteService.AddClienteAsync(clienteDto);
 

@@ -1,4 +1,6 @@
-﻿using Clientes.Application.Interfaces;
+﻿using Clientes.Application.DTOs.TipoTelefone;
+using Clientes.Application.Extensions;
+using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
 using Clientes.Domain.Interfaces;
 
@@ -7,10 +9,12 @@ namespace Clientes.Application.Services
     public class TelefoneService : ITelefoneService
     {
         private readonly ITelefoneRepository _telefoneRepository;
+        private readonly ITipoTelefoneRepository _tipoTelefoneRepository;
 
-        public TelefoneService(ITelefoneRepository telefoneRepository)
+        public TelefoneService(ITelefoneRepository telefoneRepository, ITipoTelefoneRepository tipoTelefoneRepository)
         {
             _telefoneRepository = telefoneRepository;
+            _tipoTelefoneRepository = tipoTelefoneRepository;
         }
 
         public async Task<List<Telefone>> GetTelefonesByClienteAsync(Guid codigoCliente)
@@ -49,9 +53,9 @@ namespace Clientes.Application.Services
             return (true,new List<string>());
         }
 
-        public async Task<(bool Success, List<string>Errors)> RemoverTelefoneAsync(Guid codigoCliente, string numeroTelefone)
+        public async Task<(bool Success, List<string>Errors)> RemoverTelefoneAsync(string numeroTelefone)
         {
-            var telefoneExistente = await _telefoneRepository.GetAsync(codigoCliente, numeroTelefone);
+            var telefoneExistente = await _telefoneRepository.GetByNumeroAsync(numeroTelefone);
             if (telefoneExistente == null)
                 return (false, new List<string> { "Telefone não encontrado." });
 
@@ -59,6 +63,13 @@ namespace Clientes.Application.Services
             await _telefoneRepository.UpdateAsync(telefoneExistente);
 
             return (true,new List<string>());
+        }
+
+        public async Task<List<ResponseTipoTelefoneDto>> GetTiposTelefone()
+        {
+            var tiposTelefones = await _tipoTelefoneRepository.GetAllAsync();
+
+            return TipoTelefoneExtensions.ToListDto(tiposTelefones);
         }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using Clientes.Application.DTOs.Cliente;
+using Clientes.Application.DTOs.Telefone;
 using Clientes.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Clientes.Application.Extensions
 {
@@ -26,7 +23,25 @@ namespace Clientes.Application.Extensions
                 UF = dto.UF,
                 DataInsercao = DateTime.UtcNow,
                 UsuarioInsercao = dto.UsuarioInsercao,
-                //Telefones = dto.Telefones.Select(t => t.ToEntity()).ToList()
+                Telefones = dto.Telefones.Select(t => t.ToEntity()).ToList()
+            };
+        }
+
+        public static ResponseClientes ToResponseDto(this Cliente entity)
+        {
+            return new ResponseClientes
+            {
+                CodigoCliente = entity.CodigoCliente,
+                Cidade = entity.Cidade,
+                Documento = entity.Documento,
+                NomeFantasia = entity.NomeFantasia,
+                Bairro = entity.Bairro,
+                Cep = entity.CEP,
+                Complemento = entity.Complemento ?? string.Empty,
+                Endereco = entity.Endereco,
+                RazaoSocial = entity.RazaoSocial,
+                Uf = entity.UF,
+                Telefones = entity.Telefones?.Select(t => t.ToResponseDto()).ToList() ?? new List<ResponseTelefoneDto>()
             };
         }
     }

@@ -14,10 +14,12 @@ namespace Clientes.Application.Services
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
+        private readonly ITelefoneRepository _telefoneRepository;
 
-        public ClienteService(IClienteRepository clienteRepository)
+        public ClienteService(IClienteRepository clienteRepository, ITelefoneRepository telefoneRepository)
         {
             _clienteRepository = clienteRepository;
+            _telefoneRepository = telefoneRepository;
         }
 
         /// <summary>
@@ -34,9 +36,10 @@ namespace Clientes.Application.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Cliente?> GetClienteByIdAsync(Guid id)
+        public async Task<ResponseClientes?> GetClienteByIdAsync(Guid id)
         {
-            return await _clienteRepository.GetByIdAsync(id);
+            var cliente = await _clienteRepository.GetByIdAsync(id);
+            return cliente?.ToResponseDto();
         }
 
         /// <summary>
@@ -44,11 +47,10 @@ namespace Clientes.Application.Services
         /// </summary>
         /// <param name="cliente"></param>
         /// <returns></returns>
-        public async Task<Cliente> AddClienteAsync(CreateClienteDto clienteDto)
+        public async Task<ResponseClientes> AddClienteAsync(CreateClienteDto clienteDto)
         {
-            var clienteEntity = ClienteExtensions.ToEntity(clienteDto);
-
-            return await _clienteRepository.AddAsync(clienteEntity);
+            var cliente = await _clienteRepository.AddAsync(ClienteExtensions.ToEntity(clienteDto));
+            return cliente.ToResponseDto();
         }
 
         /// <summary>

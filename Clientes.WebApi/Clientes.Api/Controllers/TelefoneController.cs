@@ -1,4 +1,5 @@
-﻿using Clientes.Application.Interfaces;
+﻿using Clientes.Application.DTOs.TipoTelefone;
+using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -58,11 +59,19 @@ namespace Clientes.Api.Controllers
         [HttpDelete("{numeroTelefone}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(List<string>), 404)]
-        public async Task<IActionResult> Delete(Guid clienteId, string numeroTelefone)
+        public async Task<IActionResult> Delete(string numeroTelefone)
         {
-            var (success, erros) = await _telefoneService.RemoverTelefoneAsync(clienteId, numeroTelefone);
+            var (success, erros) = await _telefoneService.RemoverTelefoneAsync(numeroTelefone);
 
             return success ? NoContent() : NotFound(new { Mensagem = "Erro ao deletar telefone.", Erros = erros });
+        }
+
+        [HttpGet("tipos-telefone")]
+        [ProducesResponseType(typeof(List<ResponseTipoTelefoneDto>), 200)]
+        public async Task<IActionResult> GetTiposTelefones()
+        {
+            var telefones = await _telefoneService.GetTiposTelefone();
+            return Ok(telefones);
         }
     }
 }

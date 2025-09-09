@@ -3,12 +3,11 @@
 <h2>Novo Cliente</h2>
 
 <form id="form-create-cliente">
-    <div class="mb-3">
-        <label asp-for="RazaoSocial"></label>
-        <input asp-for="RazaoSocial" class="form-control" />
-        <span asp-validation-for="RazaoSocial" class="text-danger"></span>
-    </div>
-
+	<div class="mb-3">
+		<label asp-for="RazaoSocial"></label>
+		<input asp-for="RazaoSocial" class="form-control" />
+		<span asp-validation-for="RazaoSocial" class="text-danger"></span>
+	</div>
     <div class="mb-3">
         <label asp-for="NomeFantasia"></label>
         <input asp-for="NomeFantasia" class="form-control" />
@@ -57,6 +56,40 @@
         <input asp-for="CEP" class="form-control" />
     </div>
 
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+	<h4>Telefones</h4>
+	<table class="table" id="tabela-telefones">
+		<thead>
+			<tr>
+				<th>Número</th>
+				<th>Tipo</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	<button type="button" class="btn btn-primary" id="btn-add-telefone">Adicionar Telefone</button>
+
+	<br /><br />
+	<button type="submit" class="btn btn-success">Salvar</button>
+	<a asp-action="Index" class="btn btn-secondary">Voltar</a>
 </form>
+
+<table style="display:none">
+	<tbody>
+		<tr id="template-telefone">
+			<td><input name="Telefones[0].NumeroTelefone" class="form-control" /></td>
+			<td>
+				<select name="Telefones[0].CodigoTipoTelefone" class="form-control tipo-telefone"></select>
+
+			</td>
+			<td>
+				<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+@section Scripts {
+	<script src="~/js/telefones.js" asp-append-version="true"></script>
+}

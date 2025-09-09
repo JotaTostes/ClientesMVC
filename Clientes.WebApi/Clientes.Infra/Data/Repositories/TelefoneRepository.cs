@@ -1,11 +1,6 @@
 ﻿using Clientes.Domain.Entities;
 using Clientes.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Clientes.Infra.Data.Repositories
 {
@@ -21,6 +16,9 @@ namespace Clientes.Infra.Data.Repositories
 
         public async Task<Telefone?> GetAsync(Guid codigoCliente, string numeroTelefone) =>
         await _ctx.Telefones.FindAsync(codigoCliente, numeroTelefone);
+
+        public async Task<Telefone?> GetByNumeroAsync(string numeroTelefone) =>
+        await _ctx.Telefones.FirstAsync(x => x.NumeroTelefone == numeroTelefone);
 
 
         public async Task<Telefone> AddAsync(Telefone entity)
