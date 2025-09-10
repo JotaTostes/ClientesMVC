@@ -1,4 +1,5 @@
-﻿using Clientes.Application.DTOs.TipoTelefone;
+﻿using Clientes.Application.DTOs.Telefone;
+using Clientes.Application.DTOs.TipoTelefone;
 using Clientes.Domain.Entities;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace Clientes.Application.Interfaces
     public interface ITelefoneService
     {
         Task<List<Telefone>> GetTelefonesByClienteAsync(Guid codigoCliente);
-        Task<(bool Success, List<string> Errors)> AddTelefoneAsync(Telefone telefone);
+        Task<(bool Success, List<string> Errors)> AddTelefoneAsync(CreateTelefoneDto telefoneDto);
         Task<(bool Success, List<string> Errors)> UpdateTelefoneAsync(Guid codigoCliente, Telefone telefone);
         Task<(bool Success, List<string> Errors)> RemoverTelefoneAsync(string numeroTelefone);
         Task<List<ResponseTipoTelefoneDto>> GetTiposTelefone();

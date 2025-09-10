@@ -1,11 +1,18 @@
 ﻿$(document).ready(function () {
+
+    $('#tabela-telefones').find('input[name*="NumeroTelefone"]').mask('(00) 00000-0000');
+
+    $(document).on('focus', 'input[name*="NumeroTelefone"]', function () {
+        $(this).mask('(00) 00000-0000');
+    });
+
     let contador = 0;
 
     $("#btn-add-telefone").click(function () {
         let $clone = $("#template-telefone").clone();
         $clone.removeAttr("id").show();
 
-        // Atualiza os índices dos inputs
+
         $clone.find("input, select").each(function () {
             let name = $(this).attr("name");
             name = name.replace(/\d+/, contador);

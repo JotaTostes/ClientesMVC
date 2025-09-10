@@ -20,12 +20,14 @@
 
         $("#tabela-telefones tbody tr").each(function () {
             let numero = $(this).find("input[name*='.Numero']").val();
+            let operadora = $(this).find("input[name*='.Operadora']").val();
             let codigoTipoTelefone = $(this).find("select.tipo-telefone").val();
 
             if (numero && codigoTipoTelefone) {
                 cliente.telefones.push({
                     numeroTelefone: numero,
-                    codigoTipoTelefone: codigoTipoTelefone
+                    codigoTipoTelefone: codigoTipoTelefone,
+                    operadora: operadora
                 });
             }
         });
@@ -69,12 +71,14 @@
 
         $("#tabela-telefones tbody tr").each(function () {
             let numero = $(this).find("input[name*='.Numero']").val();
+            let operadora = $(this).find("input[name*='.Operadora']").val();
             let codigoTipoTelefone = $(this).find("select.tipo-telefone").val();
-            
+
             if (numero && codigoTipoTelefone) {
                 cliente.telefones.push({
                     numeroTelefone: numero,
-                    codigoTipoTelefone: codigoTipoTelefone
+                    codigoTipoTelefone: codigoTipoTelefone,
+                    operadora: operadora
                 });
             }
         });

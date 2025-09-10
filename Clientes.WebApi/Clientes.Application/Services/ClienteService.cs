@@ -78,9 +78,48 @@ namespace Clientes.Application.Services
             existente.CEP = cliente.CEP;
             existente.UF = cliente.UF;
 
+            GerenciarTelefones(existente, cliente);
+
             await _clienteRepository.UpdateAsync(existente);
 
             return (true, new List<string>());
+        }
+
+        /// <summary>
+        /// Adiciona ou atualiza telefones associados ao cliente
+        /// </summary>
+        /// <param name="existente"></param>
+        /// <param name="atualizado"></param>
+        private void GerenciarTelefones(Cliente existente, Cliente atualizado)
+        {
+            foreach (var tel in atualizado.Telefones)
+            {
+                tel.NumeroTelefone = tel.NumeroTelefone.NormalizarNumero();
+
+                var telefoneExistente = existente.Telefones
+                    .FirstOrDefault(t => t.CodigoTipoTelefone == tel.CodigoTipoTelefone
+                                      && t.NumeroTelefone == tel.NumeroTelefone);
+
+                if (telefoneExistente == null)
+                {
+                    // Novo telefone
+                    existente.Telefones.Add(new Telefone
+                    {
+                        CodigoCliente = existente.CodigoCliente,
+                        NumeroTelefone = tel.NumeroTelefone,
+                        CodigoTipoTelefone = tel.CodigoTipoTelefone,
+                        Operadora = tel.Operadora,
+                        UsuarioInsercao = tel.UsuarioInsercao
+                    });
+                }
+                else
+                {
+                    // Atualizar telefone existente
+                    telefoneExistente.Operadora = tel.Operadora;
+                    telefoneExistente.NumeroTelefone = tel.NumeroTelefone;
+                    telefoneExistente.CodigoTipoTelefone = tel.CodigoTipoTelefone;
+                }
+            }
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace Clientes.Application.Extensions
             {
                 CodigoCliente = dto.CodigoCliente,
                 CodigoTipoTelefone = dto.CodigoTipoTelefone,
-                NumeroTelefone = dto.NumeroTelefone,
+                NumeroTelefone = dto.NumeroTelefone.NormalizarNumero(),
                 Operadora = dto.Operadora,
             };
         }
@@ -44,5 +44,12 @@ namespace Clientes.Application.Extensions
             };
         }
 
+        public static string NormalizarNumero(this string numero)
+        {
+            if (string.IsNullOrWhiteSpace(numero))
+                return string.Empty;
+
+            return new string(numero.Where(char.IsDigit).ToArray());
+        }
     }
 }

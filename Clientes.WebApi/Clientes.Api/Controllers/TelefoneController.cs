@@ -1,4 +1,5 @@
-﻿using Clientes.Application.DTOs.TipoTelefone;
+﻿using Clientes.Application.DTOs.Telefone;
+using Clientes.Application.DTOs.TipoTelefone;
 using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,7 @@ namespace Clientes.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Telefone), 201)]
         [ProducesResponseType(typeof(List<string>), 400)]
-        public async Task<IActionResult> Create(Guid clienteId, [FromBody] Telefone telefone)
+        public async Task<IActionResult> Create(Guid clienteId, [FromBody] CreateTelefoneDto telefone)
         {
             var (success, erros) = await _telefoneService.AddTelefoneAsync(telefone);
 

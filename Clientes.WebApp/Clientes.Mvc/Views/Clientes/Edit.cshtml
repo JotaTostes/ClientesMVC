@@ -65,6 +65,7 @@
 				<thead>
 					<tr>
 						<th>Número</th>
+						<th>Operadora</th>
 						<th>Tipo</th>
 						<th>Ações</th>
 					</tr>
@@ -75,6 +76,9 @@
 						<tr>
 							<td>
 								<input name="Telefones[@i].NumeroTelefone" value="@Model.Telefones[i].NumeroTelefone" class="form-control" />
+							</td>
+							<td>
+								<input name="Telefones[@i].Operadora" value="@Model.Telefones[i].Operadora" class="form-control" />
 							</td>
 							<td>
 								<select name="Telefones[@i].CodigoTipoTelefone" class="form-control tipo-telefone" data-selected="@Model.Telefones[i].CodigoTipoTelefone"></select>
@@ -99,6 +103,7 @@
 	<tbody>
 		<tr id="template-telefone">
 			<td><input name="Telefones[0].NumeroTelefone" class="form-control" /></td>
+			<td><input name="Telefones[0].Operadora" class="form-control" /></td>
 			<td>
 				<select name="Telefones[0].CodigoTipoTelefone" class="form-control tipo-telefone"></select>
 			</td>
