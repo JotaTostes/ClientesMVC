@@ -18,8 +18,8 @@ namespace Clientes.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Cliente>), 200)]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetAll()
+        [ProducesResponseType(typeof(IEnumerable<ResponseClientes>), 200)]
+        public async Task<ActionResult<IEnumerable<ResponseClientes>>> GetAll()
         {
             var clientes = await _clienteService.GetAllClientesAsync();
             return Ok(clientes);

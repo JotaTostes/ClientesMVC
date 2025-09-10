@@ -59,12 +59,12 @@
 				</div>
 			</div>
 
-			<!-- Telefones -->
 			<h4>Telefones</h4>
 			<table class="table" id="tabela-telefones">
 				<thead>
 					<tr>
 						<th>Número</th>
+						<th>Operadora</th>
 						<th>Tipo</th>
 						<th>Ações</th>
 					</tr>
@@ -74,7 +74,10 @@
 					{
 						<tr>
 							<td>
-								<input name="Telefones[@i].NumeroTelefone" value="@Model.Telefones[i].NumeroTelefone" class="form-control" />
+								<input name="Telefones[@i].NumeroTelefone" value="@Model.Telefones[i].NumeroTelefone" class="form-control" readonly />
+							</td>
+							<td>
+								<input name="Telefones[@i].Operadora" value="@Model.Telefones[i].Operadora" class="form-control" />
 							</td>
 							<td>
 								<select name="Telefones[@i].CodigoTipoTelefone" class="form-control tipo-telefone" data-selected="@Model.Telefones[i].CodigoTipoTelefone"></select>
@@ -82,6 +85,7 @@
 							<td>
 								<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
 							</td>
+							<input type="hidden" name="Telefones[@i].CodigoTelefone" value="@Model.Telefones[i].CodigoTelefone" />
 						</tr>
 					}
 				</tbody>
@@ -99,12 +103,14 @@
 	<tbody>
 		<tr id="template-telefone">
 			<td><input name="Telefones[0].NumeroTelefone" class="form-control" /></td>
+			<td><input name="Telefones[0].Operadora" class="form-control" /></td>
 			<td>
 				<select name="Telefones[0].CodigoTipoTelefone" class="form-control tipo-telefone"></select>
 			</td>
 			<td>
 				<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
 			</td>
+			<input type="hidden" name="Telefones[0].CodigoTelefone" />
 		</tr>
 	</tbody>
 </table>

@@ -44,5 +44,13 @@ namespace Clientes.Application.Extensions
                 Telefones = entity.Telefones?.Select(t => t.ToResponseDto()).ToList() ?? new List<ResponseTelefoneDto>()
             };
         }
+
+        public static IEnumerable<ResponseClientes> ToResponseDto(this IEnumerable<Cliente> entities)
+        {
+            if (entities == null || !entities.Any())
+                return new List<ResponseClientes>();
+
+            return entities.Select(e => e.ToResponseDto()).ToList();
+        }
     }
 }

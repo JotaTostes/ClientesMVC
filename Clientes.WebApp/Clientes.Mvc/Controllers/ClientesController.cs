@@ -69,6 +69,7 @@ namespace Clientes.Mvc.Controllers
                 CEP = clienteEntity.CEP,
                 Telefones = clienteEntity.Telefones.Select(t => new TelefoneViewModel
                 {
+                    CodigoTelefone = t.CodigoTelefone,
                     CodigoTipoTelefone = t.CodigoTipoTelefone,
                     NumeroTelefone = t.NumeroTelefone,
                     Operadora = t.Operadora

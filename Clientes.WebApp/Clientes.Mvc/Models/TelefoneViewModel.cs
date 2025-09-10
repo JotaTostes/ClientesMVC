@@ -5,6 +5,7 @@ namespace Clientes.Mvc.Models
     public class TelefoneViewModel
     {
         public Guid CodigoCliente { get; set; }
+        public Guid CodigoTelefone { get; set; }
 
         [Required, StringLength(20)]
         public string NumeroTelefone { get; set; }

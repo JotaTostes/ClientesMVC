@@ -20,7 +20,7 @@ namespace Clientes.Domain.Entities
         public string CEP { get; set; } = string.Empty;
         public string UF { get; set; } = string.Empty;
         public DateTime DataInsercao { get; set; } = DateTime.UtcNow;
-        public string UsuarioInsercao { get; set; } = string.Empty;
+        public string UsuarioInsercao { get; set; } = "admin";
 
 
         public ICollection<Telefone> Telefones { get; set; } = new List<Telefone>();

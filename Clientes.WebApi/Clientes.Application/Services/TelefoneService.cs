@@ -1,4 +1,5 @@
-﻿using Clientes.Application.DTOs.TipoTelefone;
+﻿using Clientes.Application.DTOs.Telefone;
+using Clientes.Application.DTOs.TipoTelefone;
 using Clientes.Application.Extensions;
 using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
@@ -22,18 +23,18 @@ namespace Clientes.Application.Services
             return await _telefoneRepository.GetByClienteAsync(codigoCliente);
         }
 
-        public async Task<(bool Success, List<string>Errors)> AddTelefoneAsync(Telefone telefone)
+        public async Task<(bool Success, List<string>Errors)> AddTelefoneAsync(CreateTelefoneDto telefoneDto)
         {
-            if (telefone == null || string.IsNullOrWhiteSpace(telefone.NumeroTelefone))
+            if (telefoneDto == null || string.IsNullOrWhiteSpace(telefoneDto.NumeroTelefone))
                 return (false, new List<string> { "Telefone inválido." });
 
 
-            var telefoneExistente = await _telefoneRepository.GetAsync(telefone.CodigoCliente, telefone.NumeroTelefone);
+            var telefoneExistente = await _telefoneRepository.GetAsync(telefoneDto.CodigoCliente, telefoneDto.NumeroTelefone);
 
             if (telefoneExistente != null)
                 return (false, new List<string> { "Telefone já cadastrado para este cliente." });
 
-            await _telefoneRepository.AddAsync(telefone);
+            await _telefoneRepository.AddAsync(telefoneDto.ToEntity());
             return (true, new List<string>());
         }
 

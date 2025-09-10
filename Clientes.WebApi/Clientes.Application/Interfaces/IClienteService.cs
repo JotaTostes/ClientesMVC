@@ -6,7 +6,7 @@ namespace Clientes.Application.Interfaces
 {
     public interface IClienteService
     {
-        Task<List<Cliente>> GetAllClientesAsync();
+        Task<IEnumerable<ResponseClientes>> GetAllClientesAsync();
         Task<ResponseClientes?> GetClienteByIdAsync(Guid id);
         Task<ResponseClientes> AddClienteAsync(CreateClienteDto clienteDto);
         Task<(bool Success, List<string> Errors)> UpdateClienteAsync(Guid id, Cliente cliente);

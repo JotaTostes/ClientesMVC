@@ -12,5 +12,6 @@ namespace Clientes.Application.DTOs.Telefone
         public string NumeroTelefone { get; set; }
         public Guid CodigoTipoTelefone { get; set; }
         public string? Operadora { get; set; }
+        public string UsuarioInsercao { get; set; } = "ADMIN";
     }
 }

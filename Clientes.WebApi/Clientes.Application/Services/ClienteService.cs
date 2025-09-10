@@ -26,9 +26,10 @@ namespace Clientes.Application.Services
         /// Retorna todos os clientes cadastrados
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Cliente>> GetAllClientesAsync()
+        public async Task<IEnumerable<ResponseClientes>> GetAllClientesAsync()
         {
-            return await _clienteRepository.GetAllAsync();
+            var clientes = await _clienteRepository.GetAllAsync();
+            return clientes.ToResponseDto();
         }
 
         /// <summary>
@@ -49,12 +50,12 @@ namespace Clientes.Application.Services
         /// <returns></returns>
         public async Task<ResponseClientes> AddClienteAsync(CreateClienteDto clienteDto)
         {
-            var cliente = await _clienteRepository.AddAsync(ClienteExtensions.ToEntity(clienteDto));
+            var cliente = await _clienteRepository.AddAsync(clienteDto.ToEntity());
             return cliente.ToResponseDto();
         }
 
         /// <summary>
-        /// Atualiza um cliente existente
+        /// Atualiza um cliente existente e seus telefones
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cliente"></param>
@@ -78,9 +79,44 @@ namespace Clientes.Application.Services
             existente.CEP = cliente.CEP;
             existente.UF = cliente.UF;
 
+            GerenciarTelefones(existente, cliente);
+
             await _clienteRepository.UpdateAsync(existente);
 
             return (true, new List<string>());
+        }
+
+        /// <summary>
+        /// Adiciona ou atualiza telefones associados ao cliente
+        /// </summary>
+        /// <param name="existente"></param>
+        /// <param name="atualizado"></param>
+        private void GerenciarTelefones(Cliente existente, Cliente atualizado)
+        {
+            foreach (var tel in atualizado.Telefones)
+            {
+                tel.NumeroTelefone = tel.NumeroTelefone.NormalizarNumero();
+
+                var telefoneExistente = existente.Telefones.FirstOrDefault(x => x.CodigoTelefone == tel.CodigoTelefone);
+
+                if (telefoneExistente is null)
+                {
+                    existente.Telefones.Add(new Telefone
+                    {
+                        CodigoTelefone = Guid.NewGuid(),
+                        CodigoCliente = existente.CodigoCliente,
+                        NumeroTelefone = tel.NumeroTelefone,
+                        CodigoTipoTelefone = tel.CodigoTipoTelefone,
+                        Operadora = tel.Operadora,
+                        UsuarioInsercao = "ADMIN"
+                    });
+                }
+                else
+                {
+                    telefoneExistente.Operadora = tel.Operadora;
+                    telefoneExistente.CodigoTipoTelefone = tel.CodigoTipoTelefone;
+                }
+            }
         }
 
         /// <summary>

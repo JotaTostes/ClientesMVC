@@ -9,8 +9,9 @@ namespace Clientes.Infra.Data
     {
         public AppDbContext CreateDbContext(string[] args)
         {
+            string basePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "Clientes.Api"));
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory().Replace("Clientes.Infra.Data", "Clientes.Api"))
+                .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
                 .Build();
 

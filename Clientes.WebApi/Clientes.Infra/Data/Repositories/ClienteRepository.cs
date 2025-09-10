@@ -16,11 +16,16 @@ namespace Clientes.Infra.Data.Repositories
 
 
         public async Task<Cliente?> GetByIdAsync(Guid id) =>
-        await _ctx.Clientes.Include(c => c.Telefones.Where(t => t.Ativo)).FirstOrDefaultAsync(c => c.CodigoCliente == id);
+        await _ctx.Clientes
+            .Include(c => c.Telefones.Where(t => t.Ativo))
+            .FirstOrDefaultAsync(c => c.CodigoCliente == id);
 
 
-        public async Task<List<Cliente>> GetAllAsync() =>
-        await _ctx.Clientes.AsNoTracking().ToListAsync();
+        public async Task<IEnumerable<Cliente>> GetAllAsync() =>
+        await _ctx.Clientes
+            .Include(c => c.Telefones.Where(t => t.Ativo))
+            .AsNoTracking()
+            .ToListAsync();
 
 
         public async Task<Cliente> AddAsync(Cliente entity)
