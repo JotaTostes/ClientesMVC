@@ -27,6 +27,7 @@ namespace Clientes.Application.Extensions
         {
             return new Telefone
             {
+                CodigoTelefone = Guid.NewGuid(),
                 CodigoCliente = dto.CodigoCliente,
                 CodigoTipoTelefone = dto.CodigoTipoTelefone,
                 NumeroTelefone = dto.NumeroTelefone.NormalizarNumero(),
@@ -38,6 +39,7 @@ namespace Clientes.Application.Extensions
         {
             return new ResponseTelefoneDto
             {
+                CodigoTelefone = entity.CodigoTelefone,
                 CodigoTipoTelefone = entity.CodigoTipoTelefone,
                 NumeroTelefone = entity.NumeroTelefone,
                 Operadora = entity.Operadora,

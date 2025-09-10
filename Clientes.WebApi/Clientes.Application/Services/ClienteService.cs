@@ -26,9 +26,10 @@ namespace Clientes.Application.Services
         /// Retorna todos os clientes cadastrados
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Cliente>> GetAllClientesAsync()
+        public async Task<IEnumerable<ResponseClientes>> GetAllClientesAsync()
         {
-            return await _clienteRepository.GetAllAsync();
+            var clientes = await _clienteRepository.GetAllAsync();
+            return clientes.ToResponseDto();
         }
 
         /// <summary>
@@ -49,12 +50,12 @@ namespace Clientes.Application.Services
         /// <returns></returns>
         public async Task<ResponseClientes> AddClienteAsync(CreateClienteDto clienteDto)
         {
-            var cliente = await _clienteRepository.AddAsync(ClienteExtensions.ToEntity(clienteDto));
+            var cliente = await _clienteRepository.AddAsync(clienteDto.ToEntity());
             return cliente.ToResponseDto();
         }
 
         /// <summary>
-        /// Atualiza um cliente existente
+        /// Atualiza um cliente existente e seus telefones
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cliente"></param>
@@ -96,27 +97,23 @@ namespace Clientes.Application.Services
             {
                 tel.NumeroTelefone = tel.NumeroTelefone.NormalizarNumero();
 
-                var telefoneExistente = existente.Telefones
-                    .FirstOrDefault(t => t.CodigoTipoTelefone == tel.CodigoTipoTelefone
-                                      && t.NumeroTelefone == tel.NumeroTelefone);
+                var telefoneExistente = existente.Telefones.FirstOrDefault(x => x.CodigoTelefone == tel.CodigoTelefone);
 
-                if (telefoneExistente == null)
+                if (telefoneExistente is null)
                 {
-                    // Novo telefone
                     existente.Telefones.Add(new Telefone
                     {
+                        CodigoTelefone = Guid.NewGuid(),
                         CodigoCliente = existente.CodigoCliente,
                         NumeroTelefone = tel.NumeroTelefone,
                         CodigoTipoTelefone = tel.CodigoTipoTelefone,
                         Operadora = tel.Operadora,
-                        UsuarioInsercao = tel.UsuarioInsercao
+                        UsuarioInsercao = "ADMIN"
                     });
                 }
                 else
                 {
-                    // Atualizar telefone existente
                     telefoneExistente.Operadora = tel.Operadora;
-                    telefoneExistente.NumeroTelefone = tel.NumeroTelefone;
                     telefoneExistente.CodigoTipoTelefone = tel.CodigoTipoTelefone;
                 }
             }

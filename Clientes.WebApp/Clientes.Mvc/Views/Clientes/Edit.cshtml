@@ -59,7 +59,6 @@
 				</div>
 			</div>
 
-			<!-- Telefones -->
 			<h4>Telefones</h4>
 			<table class="table" id="tabela-telefones">
 				<thead>
@@ -75,7 +74,7 @@
 					{
 						<tr>
 							<td>
-								<input name="Telefones[@i].NumeroTelefone" value="@Model.Telefones[i].NumeroTelefone" class="form-control" />
+								<input name="Telefones[@i].NumeroTelefone" value="@Model.Telefones[i].NumeroTelefone" class="form-control" readonly />
 							</td>
 							<td>
 								<input name="Telefones[@i].Operadora" value="@Model.Telefones[i].Operadora" class="form-control" />
@@ -86,6 +85,7 @@
 							<td>
 								<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
 							</td>
+							<input type="hidden" name="Telefones[@i].CodigoTelefone" value="@Model.Telefones[i].CodigoTelefone" />
 						</tr>
 					}
 				</tbody>
@@ -110,6 +110,7 @@
 			<td>
 				<button type="button" class="btn btn-danger btn-remove-telefone">Remover</button>
 			</td>
+			<input type="hidden" name="Telefones[0].CodigoTelefone" />
 		</tr>
 	</tbody>
 </table>

@@ -29,7 +29,7 @@
         $(this).closest("tr").remove();
         let numero = $(this).closest("tr").find("input[name*='NumeroTelefone']").val();
         $.ajax({
-            url: window.apiBaseUrl + "/telefone/" + numero,
+            url: window.apiBaseUrl + "/telefone/" + normalizarTelefone(numero),
             method: 'DELETE',
             success: function (data) {
                 alert("Telefone excluido com sucesso");
@@ -39,6 +39,14 @@
             }
         });
     });
+
+    function normalizarTelefone(numero) {
+        if (!numero) return "";
+
+        let apenasDigitos = numero.replace(/\D/g, "");
+
+        return apenasDigitos;
+    }
 
     function carregarTiposTelefone(selectElement, valorSelecionado = null) {
         $.ajax({

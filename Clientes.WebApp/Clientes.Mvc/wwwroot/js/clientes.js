@@ -73,18 +73,28 @@
             let numero = $(this).find("input[name*='.Numero']").val();
             let operadora = $(this).find("input[name*='.Operadora']").val();
             let codigoTipoTelefone = $(this).find("select.tipo-telefone").val();
+            let codigoTelefone = $(this).find("input[name*='.CodigoTelefone']").val();
 
             if (numero && codigoTipoTelefone) {
-                cliente.telefones.push({
+                let telefone = {
                     numeroTelefone: numero,
                     codigoTipoTelefone: codigoTipoTelefone,
                     operadora: operadora
-                });
+                };
+
+
+                if (codigoTelefone) {
+                    telefone.codigoTelefone = codigoTelefone;
+                }
+
+                cliente.telefones.push(telefone);
             }
         });
 
+        console.log("Cliente a ser atualizado:", cliente);
+        let requestUrl = window.apiBaseUrl + "/clientes/" + clienteId;
         $.ajax({
-            url: window.apiBaseUrl + "/clientes/" + clienteId,
+            url: requestUrl,
             method: "PUT",
             data: JSON.stringify(cliente),
             contentType: "application/json",
@@ -94,7 +104,7 @@
             },
             error: function (xhr) {
                 console.error(xhr.responseText);
-                console.log("UrlRequisicao", url)
+                console.log("UrlRequisicao", requestUrl)
                 alert("Erro: " + xhr.status + " - " + xhr.responseText);
             }
         });
